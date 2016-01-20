@@ -1,0 +1,5 @@
+TODO:
+-----------------------------------
+- Support for m4a/.wav/others
+- Support for selective file picking (is just greedy right now)
+- Cleaning it upp

@@ -1,0 +1,20 @@
+#!/bin/bash
+IFS=$'\n'
+#for file in $1
+for file in `find -type f -name "*.mp3"`
+do
+	TRACKNO=`mid3v2 "$file" | sed 's/TRK/TRCK/' | grep --text TRCK | sed 's/.*=//g' | cut -d / -f 1`
+	NBCHARS=`echo "$TRACKNO" | wc -m`
+	if [ $NBCHARS -lt 3 ]
+	then
+		TRACKNO=`echo "$TRACKNO" | sed 's/^/0&/'`
+	fi
+	TITLE=`mid3v2 "$file" | sed 's/TT2/TIT2/' | grep --text TIT2 | sed 's/.*=//g'`
+	ALBUM=`mid3v2 "$file" | sed 's/TAL/TALB/' | grep --text TALB | sed 's/.*=//g'`
+	ARTIST=`mid3v2 "$file" | sed 's/TP1/TPE1/' | grep --text TPE1 | sed 's/.*=//g'`
+	NAME="$TRACKNO $TITLE"
+	mkdir -p "$1$ARTIST/$ALBUM"
+	cp "$file" "$1$ARTIST/$ALBUM/$NAME.mp3"
+done
+IFS="$OIFS"
+
